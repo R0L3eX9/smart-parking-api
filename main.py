@@ -91,11 +91,12 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"route help": "Make a POST request with the matrix to '/distribution/'\n"}
+    return {"route help": "Make a POST request with the matrix to '/distribution/'"}
 
 class EncodedMatrix(BaseModel):
     Matrix: list[list] = [[]]
 
 @app.post("/distribution/")
 async def create_item(matrix: EncodedMatrix):
+    print(matrix)
     return find_distribution(matrix.Matrix)
