@@ -102,12 +102,9 @@ class Path(BaseModel):
     Order: list[int]
 
 @app.post("/distribution/")
-async def create_paths(matrix: EncodedMatrix):
-    return matrix
-    # print(matrix)
-    # paths = find_distribution(matrix.Matrix)
-    # print(paths)
-    # result = []
-    # for path in paths:
-    #     result.append(Path(CarId=path[0], Order=path[1]))
-    # return result
+async def create_paths(matrix: EncodedMatrix) -> list[Path]:
+    paths = find_distribution(matrix.Matrix)
+    result = []
+    for path in paths:
+        result.append(Path(CarId=path[0], Order=path[1]))
+    return result
