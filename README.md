@@ -31,7 +31,7 @@ curl -X POST http://127.0.0.1:8080/distribution/ \
 Codes:
 - "-2" means that the area is blocked
 - "-1" means that the parking spot is occupied
-- "0" means that the this is a road
-- "1" means that the area is a parking spot
-- "2" means that the this is a car
+- "0"  means that this is a road
+- "1"  means that the area is a parking spot
+- "2"  means that this is a car
 
