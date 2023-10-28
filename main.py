@@ -99,7 +99,7 @@ class EncodedMatrix(BaseModel):
 
 class Path(BaseModel):
     CarId: int
-    Order: list[int]
+    Order: list[list[int]]
 
 @app.post("/distribution/")
 async def create_paths(matrix: EncodedMatrix) -> list[Path]:
