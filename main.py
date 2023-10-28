@@ -69,6 +69,7 @@ def find_distribution(encoded_matrix):
                 queue.append(node)
 
     paths = []
+    computed = [ 0 for _ in range(cars)]
     while len(queue):
         top = queue[0]
         queue = queue[1:]
@@ -82,10 +83,11 @@ def find_distribution(encoded_matrix):
                 queue.append(Node(top.id, new_top.x, new_top.y))
 
             # parking space found
-            if (encoded_matrix[new_top.x][new_top.y] == 1):
+            if encoded_matrix[new_top.x][new_top.y] == 1 and computed[top.id] == 0:
                 dist[top.id][new_top.x][new_top.y] = dist[top.id][top.x][top.y] + 1
                 encoded_matrix[new_top.x][new_top.y] = -1
                 paths.append([top.id, find_path(dist[top.id], new_top.x, new_top.y)[::-1]])
+                computed[top.id] = 1
     return paths
 
 
@@ -106,9 +108,11 @@ class Path(BaseModel):
     Order: list[list[int]]
 
 @app.post("/distribution/")
-async def create_paths(matrix: EncodedMatrix) -> list[Path]:
+def create_paths(matrix: EncodedMatrix) -> list[Path]:
+    print("API CALLED")
     paths = find_distribution(matrix.Matrix)
     result = []
+    print(f"I got: {paths}")
     for path in paths:
         result.append(Path(CarId=path[0], Order=path[1]))
     return result
