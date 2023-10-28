@@ -73,7 +73,7 @@ def find_distribution(encoded_matrix):
                 dist[top.id][new_top.x][new_top.y] = dist[top.id][top.x][top.y] + 1
                 queue.append(Node(top.id, new_top.x, new_top.y))
 
-            # parking lot found
+            # parking space found
             if (encoded_matrix[new_top.x][new_top.y] == 1):
                 dist[top.id][new_top.x][new_top.y] = dist[top.id][top.x][top.y] + 1
                 encoded_matrix[new_top.x][new_top.y] = -1
@@ -83,20 +83,26 @@ def find_distribution(encoded_matrix):
 
 app = FastAPI()
 
-# -2 = WALL
-# -1 = USED PARKING SPOT
-# 0 = ROAD
-# 1 = PARKING SPOT
-# 2 = CAR
-
 @app.get("/")
 def read_root():
-    return {"route help": "Make a POST request with the matrix to '/distribution/'"}
+    return {
+            "route help": "Make a POST request with the matrix to '/distribution/'",
+            "matrix types": "(WALL, USED PARKING SPOT, ROAD, PARKING SPOT, CAR) = (-2, -1, 0, 1, 2)"
+           }
 
 class EncodedMatrix(BaseModel):
     Matrix: list[list] = [[]]
 
+class Path(BaseModel):
+    CarId: int
+    Order: list[int]
+
 @app.post("/distribution/")
-async def create_item(matrix: EncodedMatrix):
+async def create_paths(matrix: EncodedMatrix) -> list[Path]:
     print(matrix)
-    return find_distribution(matrix.Matrix)
+    paths = find_distribution(matrix.Matrix)
+    print(paths)
+    result = []
+    for path in paths:
+        result.append(Path(CarId=path[0], Order=path[1]))
+    return result
