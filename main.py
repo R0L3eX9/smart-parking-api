@@ -21,9 +21,11 @@ def create_dist_array(height, width, cars):
                 data[x][i].append(0)
     return data
 
+# Retrieves one of the directions E(est), N(orth), W(est), S(outh)
+# E N W S
 def get_direction(direction):
-    OX = [-1, 1, 0, 0]
-    OY = [0, 0, -1, 1]
+    OX = [0, -1, 0, 1]
+    OY = [1, 0, -1, 0]
     return [OX[direction], OY[direction]]
 
 # Finds the only path between the parking spot located at (x, y) and its according car
@@ -42,6 +44,8 @@ def find_path(dist, x, y):
                 break
     return path
 
+# Finds simultaneously the shortest path between every car and a parking spot
+# Corrects itself if a car is closer to a parking spot
 def find_distribution(encoded_matrix):
     height = len(encoded_matrix)
     width = len(encoded_matrix[0])
